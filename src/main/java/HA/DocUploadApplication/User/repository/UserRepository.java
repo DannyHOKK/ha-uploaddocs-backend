@@ -1,0 +1,7 @@
+package HA.DocUploadApplication.User.repository;
+
+import HA.DocUploadApplication.core.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+}
