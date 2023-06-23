@@ -1,6 +1,9 @@
 package HA.DocUploadApplication.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 @Entity
@@ -11,29 +14,39 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unique_id")
     @Column(name = "unique_id", length = 10)
-    private Integer id;
+    private Long id;
     private String name;
     private String username;
+    @Email
     private String email;
+    @JsonIgnore
     private String password;
+    private String roles;
 
     public User() {
     }
 
-    public User(Integer id, String name, String username, String email, String password) {
-        this.id = id;
+    public User( String name, String username, String email, String password, String roles) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.roles = roles;
     }
 
+    public String getRoles() {
+        return roles;
+    }
 
-    public Integer getId() {
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
