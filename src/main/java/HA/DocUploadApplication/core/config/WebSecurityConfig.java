@@ -1,21 +1,14 @@
 package HA.DocUploadApplication.core.config;
 
-import HA.DocUploadApplication.User.Service.impl.UserServiceImpl;
+import HA.DocUploadApplication.User.Service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -23,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserDetailService userService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -41,14 +34,12 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain config(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf()
-                .and().cors().disable()
+        httpSecurity.cors().and().csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/admin/**").permitAll()
-                .antMatchers("/admin/signUp").permitAll()
+                .antMatchers("/admin/signup").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -57,15 +48,5 @@ public class WebSecurityConfig {
         return httpSecurity.build();
     }
 
-    @Bean
-    protected UserDetailsService userDetailsService(){
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("12345678"))
-                .authorities("ROLE_USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin);
-    }
 
 }

@@ -4,22 +4,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@SequenceGenerator(name = "unique_id", sequenceName = "seq_user_unique_id", allocationSize = 1)
 @Table(name = "User")
-public class User implements Serializable {
+public class User{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unique_id")
-    @Column(name = "unique_id", length = 10)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String username;
     @Email
     private String email;
     @JsonIgnore
+    @NotBlank
+    @Size(min = 8)
     private String password;
     private String roles;
 

@@ -1,15 +1,16 @@
 package HA.DocUploadApplication.core.dto;
 
 
-import javax.validation.constraints.Email;
 
 public class SignUpDTO {
 
     private String name;
     private String username;
-    @Email
     private String email;
     private String password;
+
+    public SignUpDTO() {
+    }
 
     public SignUpDTO(String name, String username, String email, String password) {
         this.name = name;

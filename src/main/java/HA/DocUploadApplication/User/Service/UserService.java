@@ -1,9 +1,8 @@
 package HA.DocUploadApplication.User.Service;
 
 import HA.DocUploadApplication.core.dto.SignUpDTO;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService extends UserDetailsService {
+public interface UserService{
 
-    void save(SignUpDTO signUpDTO);
+    String signUp(SignUpDTO signUpDTO);
 }
