@@ -9,7 +9,10 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user",    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email") }
+)
 public class User{
 
     @Id

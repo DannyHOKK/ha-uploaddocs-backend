@@ -13,24 +13,34 @@ public class UserDetail implements UserDetails {
 
     private Long id;
     private String username;
+    private String email;
     private String password;
     private Collection<?extends GrantedAuthority> authorities;
 
-    public UserDetail(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetail(Long id, String username,  String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
+
 
     public static UserDetail build(User user){
 
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
-        UserDetail userDetail = new UserDetail(user.getId(), user.getUsername(), user.getPassword(),authorities);
+        UserDetail userDetail = new UserDetail(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),authorities);
         return userDetail;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public Long getId() {
         return id;
     }
