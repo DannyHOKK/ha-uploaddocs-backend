@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Optional<User> findAllByUsername(String username);
 
     @Query(value = "select name from user u where u.name = :checkName",nativeQuery = true)
@@ -20,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select email from user u where u.email = :checkEmail",nativeQuery = true)
     String checkEmail(@Param("checkEmail") String email);
+
+    @Query(value = "select name,username,email from user u where u.id = :id",nativeQuery = true)
+    Map<String, String> findUserById(@Param("id") Integer id);
 }

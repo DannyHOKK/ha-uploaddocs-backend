@@ -5,10 +5,11 @@ import HA.DocUploadApplication.User.repository.UserRepository;
 import HA.DocUploadApplication.core.dto.SignUpDTO;
 import HA.DocUploadApplication.core.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public String signUp(SignUpDTO signUpDTO) {
@@ -39,5 +43,12 @@ public class UserServiceImpl implements UserService {
         User user = new User(signUpDTO.getName(),signUpDTO.getUsername(),signUpDTO.getEmail(),pwd,"ROLE_USER");
         userRepository.save(user);
         return null;
+    }
+
+    @Override
+    public Map<String,String> retrieveUserData(Integer id) {
+
+        Map<String, String> userData = userRepository.findUserById(id);
+        return userData;
     }
 }

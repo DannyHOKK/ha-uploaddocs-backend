@@ -12,13 +12,15 @@ import java.util.List;
 public class UserDetail implements UserDetails {
 
     private Long id;
+    private String name;
     private String username;
     private String email;
     private String password;
     private Collection<?extends GrantedAuthority> authorities;
 
-    public UserDetail(Long id, String username,  String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetail(Long id, String name, String username,  String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -30,8 +32,16 @@ public class UserDetail implements UserDetails {
 
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
-        UserDetail userDetail = new UserDetail(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),authorities);
+        UserDetail userDetail = new UserDetail(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(),authorities);
         return userDetail;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -68,12 +78,12 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override

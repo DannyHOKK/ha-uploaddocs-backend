@@ -5,7 +5,7 @@ import HA.DocUploadApplication.User.Service.UserService;
 import HA.DocUploadApplication.User.repository.UserRepository;
 import HA.DocUploadApplication.core.dto.CredentialDTO;
 import HA.DocUploadApplication.core.dto.SignUpDTO;
-import HA.DocUploadApplication.core.entity.User;
+import HA.DocUploadApplication.core.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +32,19 @@ public class AuthController {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @PostMapping("/login")
     public ResponseEntity<?> responseEntity(@RequestBody CredentialDTO credentialDTO){
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentialDTO.getUsername(), credentialDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String password = passwordEncoder.encode(credentialDTO.getPassword());
+        String jwt = jwtUtils.buildJwt(authentication);
 
-        return ResponseEntity.ok(authentication);
+        return ResponseEntity.ok(jwt);
     }
 
 
