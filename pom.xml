@@ -78,6 +78,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>ha-uploaddocs-backend</finalName>
 	</build>
+
 
 </project>
