@@ -1,11 +1,15 @@
 package HA.DocUploadApplication.User.controller;
 
 
+import HA.DocUploadApplication.User.Service.UserDetail;
 import HA.DocUploadApplication.User.Service.UserService;
 import HA.DocUploadApplication.User.repository.UserRepository;
 import HA.DocUploadApplication.core.dto.CredentialDTO;
+import HA.DocUploadApplication.core.dto.JwtResponseDTO;
 import HA.DocUploadApplication.core.dto.SignUpDTO;
 import HA.DocUploadApplication.core.utils.JwtUtils;
+import HA.DocUploadApplication.core.utils.ResultVoUtil;
+import HA.DocUploadApplication.core.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,34 +40,42 @@ public class AuthController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> responseEntity(@RequestBody CredentialDTO credentialDTO){
+    public ResultVO responseEntity(@RequestBody CredentialDTO credentialDTO){
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentialDTO.getUsername(), credentialDTO.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            if (credentialDTO.getUsername() == null || credentialDTO.getPassword() == null){
+                return ResultVoUtil.validFail("Please input credential");
+            }
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentialDTO.getUsername(), credentialDTO.getPassword());
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.buildJwt(authentication);
+            UserDetail userDetail = (UserDetail) authentication.getPrincipal();
+            JwtResponseDTO jwtResponseDTO = new JwtResponseDTO(jwt, userDetail.getId(),userDetail.getUsername(),userDetail.getEmail());
 
-        String jwt = jwtUtils.buildJwt(authentication);
-
-        return ResponseEntity.ok(jwt);
+            return ResultVoUtil.success("login successfully", jwtResponseDTO);
+        }catch (Exception e){
+            return ResultVoUtil.error("Username or Password incorrect");
+        }
     }
 
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody SignUpDTO signUpDTO) {
+    public ResultVO signUp(@RequestBody SignUpDTO signUpDTO) {
         try {
             if (signUpDTO.equals("{}")){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("RequestBody is empty");
+                return ResultVoUtil.validFail("RequestBody is empty");
             }
 
             String errorMsg = userService.signUp(signUpDTO);
 
             if (errorMsg != null){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMsg);
+                return ResultVoUtil.error(errorMsg);
             }
-            return ResponseEntity.status(HttpStatus.CREATED).body("Sign up successful");
+            return ResultVoUtil.success("Sign up success");
         } catch (Exception e) {
             logger.error("Error:", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sign up failed");
+            return ResultVoUtil.error("Sign up failed");
         }
     }
 
