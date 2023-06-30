@@ -54,8 +54,8 @@ jobs:
 
     - name: Deploy Docker image
       run: |
-        docker pull ${{ DOCKER_IMAGE_NAME }}
-        docker run -d --name=${{ DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ DOCKER_IMAGE_NAME }}
+        docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
+        docker run -d --name=${{ DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }}
 
     - name: Complete workflow
       run: echo "Deployment complete!"
