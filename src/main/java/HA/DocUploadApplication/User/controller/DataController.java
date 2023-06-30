@@ -1,6 +1,8 @@
 package HA.DocUploadApplication.User.controller;
 
 import HA.DocUploadApplication.User.Service.UserService;
+import HA.DocUploadApplication.core.utils.ResultVoUtil;
+import HA.DocUploadApplication.core.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,23 @@ public class DataController {
     private Logger logger = LoggerFactory.getLogger(DataController.class);
 
     @GetMapping("/showTable")
-    public Map<String, String> showDataTable(@RequestParam Integer id){
+    public ResultVO showDataTable(@RequestParam Integer id){
         try {
             Map<String,String> userData = userService.retrieveUserData(id);
-            return userData;
+            return ResultVoUtil.success("show success", userData);
         }catch (Exception e){
             logger.error("error msg:" + e);
-            return null;
+            return ResultVoUtil.error(e);
+        }
+    }
+
+    @GetMapping("/checkUpdate")
+    public ResultVO update(){
+        try {
+            return ResultVoUtil.success("update successfully");
+        }catch (Exception e){
+            logger.error("error msg:" + e);
+            return ResultVoUtil.error("update fail");
         }
     }
 }
