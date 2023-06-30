@@ -27,12 +27,7 @@ jobs:
       - name: Build and Test
         run: mvn clean install
 
-  docker:
-    needs: build
 
-    runs-on: ubuntu-latest
-
-    steps:
       - uses: actions/checkout@v2
 
       - name: Build & push Docker image
@@ -55,11 +50,6 @@ jobs:
           docker pull ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0
           docker run -d --name=${{ secrets.DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0
 
-  complete:
-    needs: docker
 
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Complete workflow
         run: echo "Deployment complete!"
