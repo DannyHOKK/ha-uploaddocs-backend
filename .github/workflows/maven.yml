@@ -38,7 +38,7 @@ jobs:
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: dannyhkk1002/ha-uploaddocs-backend
+          image: ${{ secrets.DOCKER_IMAGE_NAME }}
           tags: latest
           registry: docker.io
           dockerfile: Dockerfile
