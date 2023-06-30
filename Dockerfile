@@ -1,4 +1,4 @@
-FROM openjdk:11
-EXPOSE 8080
-ADD target/ha-uploaddocs-backend.jar ha-uploaddocs-backend.jar
-ENTRYPOINT["java","-jar","/ha-uploaddocs-backend.jar"]
+FROM amazoncorretto:11.0.19
+VOLUME /tmp
+COPY target/*.jar ha-uploaddocs-backend.jar
+ENTRYPOINT ["java","-jar","/ha-uploaddocs-backend.jar"]
