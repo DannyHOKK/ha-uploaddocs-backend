@@ -40,11 +40,27 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v6
       name: Build & push Docker image
       with:
-        image: dannyhkk1002/ha-uploaddocs-backend
+        image: ${{ secrets.DOCKER_IMAGE_NAME }}
         tags: latest
         registry: docker.io
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Stop and remove Docker container
+      run: |
+        docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || true
+        docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || true
+
+    - name: Deploy Docker image
+      run: |
+        docker pull ${{ DOCKER_IMAGE_NAME }}
+        docker run -d --name=${{ DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ DOCKER_IMAGE_NAME }}
+
+    - name: Complete workflow
+      run: echo "Deployment complete!"
+
+
+
 
  
