@@ -45,15 +45,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Stop and remove Docker container
-        run: |
-          docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0 ｜｜ true
-          docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0 || true
+      - name: Stop Docker container
+        run: docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0 ｜｜ true
+
+      - name: remove Docker container
+        run: docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0 || true
 
       - name: Deploy Docker image
-        run: |
-          docker pull ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0 || true
-          docker run -d --name=${{ secrets.DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0 || true
+        run: docker pull ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0 || true
+
+      - name: Deploy to container
+        run: docker run -d --name=${{ secrets.DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0 || true
 
   complete:
     needs: docker
