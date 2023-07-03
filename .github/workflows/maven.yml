@@ -50,7 +50,7 @@ jobs:
         run: docker run -d --name=${{ secrets.DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }} || true || exit 0
 
   complete:
-    needs: docker
+    needs: build
 
     runs-on: ubuntu-latest
 
