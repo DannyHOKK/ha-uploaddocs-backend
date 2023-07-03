@@ -47,13 +47,13 @@ jobs:
 
       - name: Stop and remove Docker container
         run: |
-          docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0
-          docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0
+          docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0 ｜｜ true
+          docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || exit 0 || true
 
       - name: Deploy Docker image
         run: |
-          docker pull ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0
-          docker run -d --name=${{ secrets.DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0
+          docker pull ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0 || true
+          docker run -d --name=${{ secrets.DOCKER_CONTAINER_NAME }} -p 8081:8081 ${{ secrets.DOCKER_IMAGE_NAME }} || exit 0 || true
 
   complete:
     needs: docker
