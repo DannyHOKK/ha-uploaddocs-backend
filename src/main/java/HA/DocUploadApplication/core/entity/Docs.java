@@ -1,17 +1,14 @@
 package HA.DocUploadApplication.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Clob;
 
 @Entity
 @Table(name = "DOCS")
-public class Docs implements Serializable {
+public class Docs  {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "REF_NO")
     private Integer refNo;
 
@@ -19,12 +16,13 @@ public class Docs implements Serializable {
     private String category;
 
     @Column(name = "FILE_NAME")
-    private String fileName;
+    private String filename;
 
     @Column(name = "DATA")
+    @Lob
     private byte[] data;
 
-    @Column(name = "DESC")
+    @Column(name = "DESCRIPTION")
     private String desc;
 
     @Column(name = "REMARK")
@@ -33,9 +31,9 @@ public class Docs implements Serializable {
     public Docs() {
     }
 
-    public Docs(String category, String fileName, byte[] data, String desc, String remark) {
+    public Docs(String category, String filename, byte[] data, String desc, String remark) {
         this.category = category;
-        this.fileName = fileName;
+        this.filename = filename;
         this.data = data;
         this.desc = desc;
         this.remark = remark;
@@ -57,12 +55,12 @@ public class Docs implements Serializable {
         this.category = category;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public byte[] getData() {
