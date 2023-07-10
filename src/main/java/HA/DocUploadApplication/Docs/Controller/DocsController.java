@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/docs")
+@CrossOrigin
 public class DocsController {
 
 
@@ -27,7 +28,7 @@ public class DocsController {
     private DocsService docsService;
 
     @PostMapping("/docsUpload")
-    public ResultVO uploadDocs(@RequestPart(value = "file") MultipartFile multipartFiles, @RequestPart(value = "details") DocsUploadDTO docsUploadDTO){
+    public ResultVO uploadDocs(@RequestParam(value = "file") MultipartFile multipartFiles, @RequestPart(value = "details") DocsUploadDTO docsUploadDTO){
         try{
             if (docsUploadDTO == null){
                 return ResultVoUtil.error("Cannot be empty");
