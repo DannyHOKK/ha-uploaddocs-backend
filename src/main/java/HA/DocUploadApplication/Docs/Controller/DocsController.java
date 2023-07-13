@@ -6,6 +6,7 @@ import HA.DocUploadApplication.core.dto.DocsUploadDTO;
 import HA.DocUploadApplication.core.entity.Docs;
 import HA.DocUploadApplication.core.utils.ResultVoUtil;
 import HA.DocUploadApplication.core.vo.ResultVO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -27,13 +28,17 @@ public class DocsController {
     @Autowired
     private DocsService docsService;
 
-    @PostMapping("/docsUpload")
-    public ResultVO uploadDocs(@RequestParam(value = "file") MultipartFile multipartFiles, @RequestPart(value = "details") DocsUploadDTO docsUploadDTO){
+    @PostMapping(value = "/docsUpload" , consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResultVO uploadDocs(@RequestPart(value = "fileDetails") String fileDetails,@RequestPart(value = "file") MultipartFile multipartFiles){
         try{
-            if (docsUploadDTO == null){
+
+            DocsUploadDTO uploadDTO = new DocsUploadDTO();
+            ObjectMapper objectMapper = new ObjectMapper();
+            uploadDTO = objectMapper.readValue(fileDetails, DocsUploadDTO.class);
+            if (fileDetails == null){
                 return ResultVoUtil.error("Cannot be empty");
             }
-            String msg = docsService.uploadDocs(multipartFiles, docsUploadDTO);
+            String msg = docsService.uploadDocs(multipartFiles, uploadDTO);
 
             if (msg == null){
                 return ResultVoUtil.success("success uploaded");
@@ -54,7 +59,7 @@ public class DocsController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentDispositionFormData("attachment",docs.getFilename());
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(resource);

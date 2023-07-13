@@ -12,10 +12,4 @@ public class DocUploadApplication {
 		SpringApplication.run(DocUploadApplication.class, args);
 	}
 
-	@Bean
-	public CommonsMultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(5242880); // Set the maximum upload size in bytes
-		return multipartResolver;
-	}
 }

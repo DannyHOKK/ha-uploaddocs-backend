@@ -1,11 +1,15 @@
 package HA.DocUploadApplication.core.dto;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DocsUploadDTO{
 
 
     private String category;
 
-    private String fileName;
+    private String filename;
 
     private String desc;
 
@@ -14,9 +18,9 @@ public class DocsUploadDTO{
     public DocsUploadDTO() {
     }
 
-    public DocsUploadDTO( String category, String fileName, String desc, String remark) {
+    public DocsUploadDTO( String category, String filename, String desc, String remark) {
         this.category = category;
-        this.fileName = fileName;
+        this.filename = filename;
         this.desc = desc;
         this.remark = remark;
     }
@@ -29,12 +33,12 @@ public class DocsUploadDTO{
         this.category = category;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getDesc() {
