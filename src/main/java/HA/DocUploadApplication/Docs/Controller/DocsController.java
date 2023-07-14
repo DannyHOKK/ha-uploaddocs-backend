@@ -29,7 +29,7 @@ public class DocsController {
     private DocsService docsService;
 
     @PostMapping(value = "/docsUpload" , consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResultVO uploadDocs(@RequestPart(value = "fileDetails") String fileDetails,@RequestPart(value = "file") MultipartFile multipartFiles){
+    public ResultVO uploadDocs(@RequestParam(value = "fileDetails") String fileDetails,@RequestPart(value = "file") MultipartFile multipartFiles){
         try{
 
             DocsUploadDTO uploadDTO = new DocsUploadDTO();
@@ -68,12 +68,12 @@ public class DocsController {
         }
     }
 
-    @PostMapping
-    public ResultVO searchAllDocs(@RequestBody DocsUploadDTO docsUploadDTO){
+    @PostMapping("/searchAllDocs")
+    public ResultVO searchAllDocs(@RequestBody(required = false) DocsUploadDTO docsUploadDTO){
         try{
             List<Docs> docsList = docsService.findDocsList(docsUploadDTO);
 
-            return ResultVoUtil.success("Get Docs Successfully");
+            return ResultVoUtil.success("Get Docs Successfully", docsList);
         }catch (Exception e){
             return ResultVoUtil.error("Get Docs List Failed");
         }

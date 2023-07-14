@@ -3,26 +3,37 @@ package HA.DocUploadApplication.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DocsUploadDTO{
 
 
     private String category;
 
-    private String filename;
-
     private String desc;
 
     private String remark;
 
+    private Date createDT;
+
+    private String createBy;
+
     public DocsUploadDTO() {
     }
 
-    public DocsUploadDTO( String category, String filename, String desc, String remark) {
+    public DocsUploadDTO(String category, String desc, String remark) {
         this.category = category;
-        this.filename = filename;
         this.desc = desc;
         this.remark = remark;
+    }
+
+    public DocsUploadDTO(String category, String desc, String remark, Date createDT, String createBy) {
+        this.category = category;
+        this.desc = desc;
+        this.remark = remark;
+        this.createDT = createDT;
+        this.createBy = createBy;
     }
 
     public String getCategory() {
@@ -31,14 +42,6 @@ public class DocsUploadDTO{
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
     }
 
     public String getDesc() {
@@ -55,5 +58,21 @@ public class DocsUploadDTO{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getCreateDT() {
+        return createDT;
+    }
+
+    public void setCreateDT(Date createDT) {
+        this.createDT = createDT;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 }

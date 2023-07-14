@@ -48,7 +48,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 UserDetailService userDetailService = SpringContextUtil.getBean(UserDetailService.class);
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), authorities);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
             }

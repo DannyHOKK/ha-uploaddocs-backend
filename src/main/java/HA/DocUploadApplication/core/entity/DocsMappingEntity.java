@@ -1,65 +1,52 @@
 package HA.DocUploadApplication.core.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
+import javax.persistence.SqlResultSetMapping;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
-@Entity
-@Table(name = "DOCS")
-public class Docs{
+@SqlResultSetMapping(name = "docsResultMapping", entities = {
+        @EntityResult(entityClass = DocsMappingEntity.class ,
+                fields = {
+                        @FieldResult(name = "refNo" , column = "REF_NO"),
+                        @FieldResult(name = "category" , column = "CATEGORY"),
+                        @FieldResult(name = "filename" , column = "FILE_NAME"),
+                        @FieldResult(name = "desc" , column = "DESCRIPTION"),
+                        @FieldResult(name = "remark" , column = "REMARK"),
+                        @FieldResult(name = "createDT" , column = "CREATE_DT"),
+                        @FieldResult(name = "createBy" , column = "CREATE_BY")
+                }
+)})
+public class DocsMappingEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "REF_NO")
     private Integer refNo;
-
-    @Column(name = "CATEGORY")
-    @NotNull
     private String category;
-
-    @Column(name = "FILE_NAME")
-    @NotNull
     private String filename;
-
-    @Column(name = "DATA")
-    @Lob
-    private byte[] data;
-
-    @Column(name = "DESCRIPTION")
-    @NotNull
     private String desc;
-
-    @Column(name = "REMARK")
     private String remark;
-
-    @Column(name = "CREATE_DATE")
     private Date createDT;
-
-    @Column(name = "CREATE_BY")
     private String createBy;
 
-    public Docs() {
+    public DocsMappingEntity() {
     }
 
-    public Docs(String category, String filename, byte[] data, String desc, String remark, Date createDT, String createBy) {
+    public DocsMappingEntity(Integer refID, String category, String filename, String desc, String remark, Date createDT, String createBy) {
+        this.refNo = refID;
         this.category = category;
         this.filename = filename;
-        this.data = data;
         this.desc = desc;
         this.remark = remark;
         this.createDT = createDT;
         this.createBy = createBy;
     }
 
-    public Integer getRefNo() {
+    public Integer getRefID() {
         return refNo;
     }
 
-    public void setRefNo(Integer refNo) {
-        this.refNo = refNo;
+    public void setRefID(Integer refID) {
+        this.refNo = refID;
     }
 
     public String getCategory() {
@@ -76,14 +63,6 @@ public class Docs{
 
     public void setFilename(String filename) {
         this.filename = filename;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
     }
 
     public String getDesc() {
