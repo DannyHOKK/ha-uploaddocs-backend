@@ -19,7 +19,7 @@ public class DataController {
     @Autowired
     private UserService userService;
 
-    private Logger logger = LoggerFactory.getLogger(DataController.class);
+    private final Logger logger = LoggerFactory.getLogger(DataController.class);
 
     @GetMapping("/showTable")
     public ResultVO showDataTable(@RequestParam Integer id){

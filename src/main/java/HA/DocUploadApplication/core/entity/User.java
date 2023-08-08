@@ -22,6 +22,9 @@ public class User{
     private String username;
     @Email
     private String email;
+    private String address;
+    private String mobile;
+    private String position;
     @JsonIgnore
     @NotBlank
     @Size(min = 8)

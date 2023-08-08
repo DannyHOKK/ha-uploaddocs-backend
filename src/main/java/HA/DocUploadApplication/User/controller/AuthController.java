@@ -49,7 +49,7 @@ public class AuthController {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentialDTO.getUsername(), credentialDTO.getPassword());
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwt = jwtUtils.buildJwt(authentication);
+            String jwt = JwtUtils.buildJwt(authentication);
             UserDetail userDetail = (UserDetail) authentication.getPrincipal();
             JwtResponseDTO jwtResponseDTO = new JwtResponseDTO(jwt, userDetail.getId(),userDetail.getUsername(),userDetail.getEmail());
 

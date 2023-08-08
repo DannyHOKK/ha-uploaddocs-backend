@@ -48,7 +48,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String,String> retrieveUserData(Integer id) {
 
-        Map<String, String> userData = userRepository.findUserById(id);
-        return userData;
+        return userRepository.findUserById(id);
     }
+
+    @Override
+    public String updateUser(User user) {
+        try {
+            userRepository.save(user);
+            return "Save Successfully";
+        }catch (Exception e){
+            return "Save Failed";
+        }
+    }
+
 }
