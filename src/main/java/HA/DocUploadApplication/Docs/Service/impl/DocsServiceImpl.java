@@ -31,7 +31,6 @@ public class DocsServiceImpl implements DocsService {
 
         try {//dealing with the larger size of file.
             //multipartFile.getBytes() is easier to use, but for the small size of file
-            SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             byte[] fileData = StreamUtils.copyToByteArray(multipartFile.getInputStream());
             Docs docs = new Docs(docsUploadDTO.getCategory(), multipartFile.getOriginalFilename(), fileData, docsUploadDTO.getDesc(), docsUploadDTO.getRemark() ,new Date(), userDetail.getUsername());

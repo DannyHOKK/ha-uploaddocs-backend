@@ -24,8 +24,8 @@ public class DataController {
     @GetMapping("/showTable")
     public ResultVO showDataTable(@RequestParam Integer id){
         try {
-            Map<String,String> userData = userService.retrieveUserData(id);
-            return ResultVoUtil.success("show success", userData);
+            // have not complete
+            return ResultVoUtil.success("show success");
         }catch (Exception e){
             logger.error("error msg:" + e);
             return ResultVoUtil.error(e);

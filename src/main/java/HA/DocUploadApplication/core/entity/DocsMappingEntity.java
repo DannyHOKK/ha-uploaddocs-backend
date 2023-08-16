@@ -6,7 +6,7 @@ import javax.persistence.SqlResultSetMapping;
 import java.io.Serializable;
 import java.util.Date;
 
-@SqlResultSetMapping(name = "docsResultMapping", entities = {
+@SqlResultSetMapping(name = "DocsResultMapping", entities = {
         @EntityResult(entityClass = DocsMappingEntity.class ,
                 fields = {
                         @FieldResult(name = "refNo" , column = "REF_NO"),

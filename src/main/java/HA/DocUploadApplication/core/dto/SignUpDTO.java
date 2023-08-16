@@ -4,7 +4,6 @@ package HA.DocUploadApplication.core.dto;
 
 public class SignUpDTO {
 
-    private String name;
     private String username;
     private String email;
     private String password;
@@ -12,19 +11,10 @@ public class SignUpDTO {
     public SignUpDTO() {
     }
 
-    public SignUpDTO(String name, String username, String email, String password) {
-        this.name = name;
+    public SignUpDTO( String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {

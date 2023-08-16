@@ -1,6 +1,6 @@
 package HA.DocUploadApplication.core.config;
 
-import HA.DocUploadApplication.User.Service.UserDetailService;
+import HA.DocUploadApplication.User.Service.impl.UserDetailServiceImpl;
 import HA.DocUploadApplication.User.repository.UserRepository;
 import HA.DocUploadApplication.core.security.filter.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.Arrays;
 
@@ -29,7 +28,7 @@ import java.util.Arrays;
 public class WebSecurityConfig {
 
     @Autowired
-    private UserDetailService userService;
+    private UserDetailServiceImpl userService;
 
     @Autowired
     private UserRepository userRepository;

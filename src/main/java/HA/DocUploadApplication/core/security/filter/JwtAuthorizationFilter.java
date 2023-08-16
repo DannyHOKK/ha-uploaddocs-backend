@@ -1,18 +1,11 @@
 package HA.DocUploadApplication.core.security.filter;
 
-import HA.DocUploadApplication.User.Service.UserDetail;
-import HA.DocUploadApplication.User.Service.UserDetailService;
-import HA.DocUploadApplication.User.repository.UserRepository;
-import HA.DocUploadApplication.core.entity.User;
+import HA.DocUploadApplication.User.Service.impl.UserDetailServiceImpl;
 import HA.DocUploadApplication.core.utils.JwtUtils;
 import HA.DocUploadApplication.core.utils.SpringContextUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,7 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             Claims claims = Jwts.parser().setSigningKey(JwtUtils.SECRET_KEY).parseClaimsJws(token).getBody();
             String username = claims.get(USERNAME).toString();
             if (username != null) {
-                UserDetailService userDetailService = SpringContextUtil.getBean(UserDetailService.class);
+                UserDetailServiceImpl userDetailService = SpringContextUtil.getBean(UserDetailServiceImpl.class);
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);

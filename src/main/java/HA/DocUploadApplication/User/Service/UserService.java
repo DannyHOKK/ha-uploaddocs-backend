@@ -3,13 +3,15 @@ package HA.DocUploadApplication.User.Service;
 import HA.DocUploadApplication.core.dto.SignUpDTO;
 import HA.DocUploadApplication.core.entity.User;
 
-import java.util.Map;
+import java.util.Optional;
 
 public interface UserService{
 
     String signUp(SignUpDTO signUpDTO);
 
-    Map<String,String> retrieveUserData(Integer id);
-
     String updateUser(User user);
+
+    Optional<User> findUserById(Long id);
+
+    String deleteUserById(Long id);
 }
