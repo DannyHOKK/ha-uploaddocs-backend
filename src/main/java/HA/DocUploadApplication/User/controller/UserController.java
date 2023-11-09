@@ -8,6 +8,7 @@ import HA.DocUploadApplication.core.utils.ResultVoUtil;
 import HA.DocUploadApplication.core.vo.ResultVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,9 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.Optional;
 
 @Controller
@@ -30,20 +33,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/update")
+    @PostMapping( value = "/update" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseBody
-    public ResultVO editUser(HttpServletRequest request, @RequestPart("image") MultipartFile file, @RequestParam("userinfo") String userInfo) throws IOException, SerialException, SQLException{
+    public ResultVO editUser(HttpServletRequest request, @RequestPart(value = "image", required = false) MultipartFile file, @RequestParam("userinfo") String userInfo) throws IOException, SerialException, SQLException{
         try{
 
-            byte[] bytes = file.getBytes();
-            Blob blob = new SerialBlob(bytes);
             UserInfoDTO userInfoDTO = new UserInfoDTO();
             ObjectMapper objectMapper = new ObjectMapper();
             userInfoDTO = objectMapper.readValue(userInfo,UserInfoDTO.class);
-            if (userInfoDTO == null){
-                return ResultVoUtil.error("Cannot be empty");
+
+            if (file != null){
+                byte[] bytes = file.getBytes();
+                Blob blob = new SerialBlob(bytes);
+                userInfoDTO.setIcon(blob);
             }
-            userInfoDTO.setIcon(blob);
+
             String errMsg = userDetailsInfoService.updateUser(userInfoDTO);
             return ResultVoUtil.success("Save successfully");
         }catch (Exception e){
@@ -51,12 +55,27 @@ public class UserController {
         }
     }
 
+    @PostMapping( value = "/getIcon")
+    @ResponseBody
+    public ResultVO getIcon(@RequestParam Long id) throws IOException, SerialException, SQLException{
+        try{
+            Blob blob = userDetailsInfoService.getIcon(id);
+            byte[] image = null;
+            image = blob.getBytes(1, (int) blob.length());
+            return ResultVoUtil.success(image);
+        }catch (Exception e){
+            return ResultVoUtil.error(e);
+        }
+    }
+
+
     @PostMapping("/getUser")
     @ResponseBody
     public ResultVO getUser(@RequestParam Long id){
         try{
             User user = userService.findUserById(id).orElseThrow();
-            return ResultVoUtil.success(user);
+            UserInfoDTO userInfoDTO = new UserInfoDTO(user);
+            return ResultVoUtil.success(userInfoDTO);
         }catch (Exception e){
             return ResultVoUtil.error(e);
         }

@@ -1,9 +1,12 @@
 package HA.DocUploadApplication.User.Service;
 
 import HA.DocUploadApplication.core.dto.UserInfoDTO;
-import HA.DocUploadApplication.core.entity.UserDetailsInfo;
+
+import java.sql.Blob;
 
 
 public interface UserDetailsInfoService {
-    String updateUser(UserInfoDTO userInfoDTO);
+    String updateUser(UserInfoDTO user);
+
+    Blob getIcon(Long id);
 }

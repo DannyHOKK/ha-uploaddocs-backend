@@ -1,5 +1,7 @@
 package HA.DocUploadApplication.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Blob;
@@ -15,6 +17,7 @@ public class UserDetailsInfo implements Serializable {
     private String mobile;
     private String position;
     @Lob
+    @JsonIgnore
     private Blob icon;
     private Date createDt;
     private Date lastModifyDt;

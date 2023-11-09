@@ -9,6 +9,7 @@ import HA.DocUploadApplication.core.entity.UserDetailsInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Blob;
 import java.util.Date;
 
 @Service
@@ -25,25 +26,34 @@ public class UserDetailsInfoServiceImpl implements UserDetailsInfoService {
             if (userInfoDTO.getEmail().isEmpty() || userInfoDTO.getUsername().isEmpty()) {
                 return "Email/Username cant be empty";
             }
-            User user = userService.findUserById(userInfoDTO.getId()).orElseThrow();
+            User originalUser = userService.findUserById(userInfoDTO.getId()).orElseThrow();
 
-            user.setUsername(userInfoDTO.getUsername());
-            user.setEmail(userInfoDTO.getEmail());
-            userService.updateUser(user);
+            originalUser.setUsername(userInfoDTO.getUsername());
+            originalUser.setEmail(userInfoDTO.getEmail());
+            userService.updateUser(originalUser);
 
-            UserDetailsInfo userDetailsInfo = userDetailsInfoRepository.findById(userInfoDTO.getId()).orElseThrow();
+            UserDetailsInfo originalUserDetailsInfo = userDetailsInfoRepository.findById(userInfoDTO.getId()).orElseThrow();
 
-            userDetailsInfo.setMobile(userInfoDTO.getMobile());
-            userDetailsInfo.setAddress(userInfoDTO.getAddress());
-            userDetailsInfo.setPosition(userInfoDTO.getPosition());
-            userDetailsInfo.setLastModifyDt(new Date());
-            userDetailsInfo.setIcon(userDetailsInfo.getIcon());
-            userDetailsInfoRepository.save(userDetailsInfo);
+            originalUserDetailsInfo.setMobile(userInfoDTO.getMobile());
+            originalUserDetailsInfo.setAddress(userInfoDTO.getAddress());
+            originalUserDetailsInfo.setPosition(userInfoDTO.getPosition());
+            originalUserDetailsInfo.setLastModifyDt(new Date());
+            if (userInfoDTO.getIcon() != null){
+                originalUserDetailsInfo.setIcon(userInfoDTO.getIcon());
+            }
+            userDetailsInfoRepository.save(originalUserDetailsInfo);
 
             return "";
         }catch (Exception e){
             return "Update Failed";
         }
+    }
+
+    @Override
+    public Blob getIcon(Long id) {
+        UserDetailsInfo userDetailsInfo = userDetailsInfoRepository.findById(id).orElseThrow();
+
+        return userDetailsInfo.getIcon();
     }
 
 }
