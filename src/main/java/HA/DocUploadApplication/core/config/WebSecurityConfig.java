@@ -66,6 +66,22 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/admin/**").permitAll()
                 .antMatchers("/admin/signup").permitAll()
+//                .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll() // Allow access to Swagger UI
+//                .antMatchers("/doc.html","/doc.html/**").permitAll()
+                .antMatchers("/",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/welcome.html",
+                        "/**/*.ico",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/static/**",
+                        "/v2/api-docs/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v3/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
@@ -80,6 +96,7 @@ public class WebSecurityConfig {
 
         return httpSecurity.build();
     }
+
 
 
     @Bean
