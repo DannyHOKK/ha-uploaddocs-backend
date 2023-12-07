@@ -5,7 +5,6 @@ import HA.DocUploadApplication.User.repository.UserRepository;
 import HA.DocUploadApplication.core.dto.SignUpDTO;
 import HA.DocUploadApplication.core.entity.User;
 import HA.DocUploadApplication.core.entity.UserDetailsInfo;
-import io.netty.util.internal.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,6 +79,15 @@ public class UserServiceImpl implements UserService {
             return "";
         }catch (Exception e){
             return "Delete Failed";
+        }
+    }
+
+    @Override
+    public List<User> findAllUser() {
+        try {
+            return userRepository.findAll();
+        }catch (Exception e){
+            return null;
         }
     }
 

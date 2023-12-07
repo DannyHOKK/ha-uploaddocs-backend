@@ -7,6 +7,7 @@ import HA.DocUploadApplication.core.entity.Docs;
 import HA.DocUploadApplication.core.utils.ResultVoUtil;
 import HA.DocUploadApplication.core.vo.ResultVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +36,7 @@ public class DocsController {
             DocsUploadDTO uploadDTO = new DocsUploadDTO();
             ObjectMapper objectMapper = new ObjectMapper();
             uploadDTO = objectMapper.readValue(fileDetails, DocsUploadDTO.class);
-            if (fileDetails == null){
+            if (fileDetails == null || fileDetails.isEmpty()){
                 return ResultVoUtil.error("Cannot be empty");
             }
             String msg = docsService.uploadDocs(multipartFiles, uploadDTO);
@@ -50,32 +51,81 @@ public class DocsController {
         }
     }
 
+//    @PostMapping("/docsDownload")
+//    public ResponseEntity<InputStreamResource> downloadDocs(@RequestParam Integer id){
+//        try {
+//            Docs docs = docsService.findDocsById(id);
+//
+//            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(docs.getData()));
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentDispositionFormData("attachment",docs.getFilename());
+//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//            return ResponseEntity.ok()
+//                    .headers(headers)
+//                    .body(resource);
+//        }catch (Exception e){
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
+
     @PostMapping("/docsDownload")
-    public ResponseEntity<InputStreamResource> downloadDocs(@RequestBody Integer id, HttpServletResponse response){
+    public ResponseEntity<byte[]> downloadDocs(@RequestParam Integer id){
         try {
             Docs docs = docsService.findDocsById(id);
 
-            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(docs.getData()));
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentDispositionFormData("attachment",docs.getFilename());
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.set("Content-Encoding", "UTF-8");
             return ResponseEntity.ok()
                     .headers(headers)
-                    .body(resource);
+                    .body(docs.getData());
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
     }
-
-    @PostMapping("/searchAllDocs")
-    public ResultVO searchAllDocs(@RequestBody(required = false) DocsUploadDTO docsUploadDTO){
+    @GetMapping("/getDocsList")
+    public ResultVO getDocsList(@RequestBody(required = false) DocsUploadDTO docsUploadDTO){
         try{
-            List<Docs> docsList = docsService.findDocsList(docsUploadDTO);
+            List<Docs> docsList = docsService.findDocsList();
 
+            if (docsList == null){
+                return ResultVoUtil.error("fail to get docs list");
+            }
             return ResultVoUtil.success("Get Docs Successfully", docsList);
         }catch (Exception e){
             return ResultVoUtil.error("Get Docs List Failed");
         }
     }
+
+    @PostMapping("/deleteDocs")
+    public ResultVO deleteDocs(@RequestParam Integer refNo){
+        try{
+            String msg = docsService.deleteDocsByRefNo(refNo);
+
+            if (StringUtils.isNotEmpty(msg)){
+                return ResultVoUtil.error(msg);
+            }
+
+            return ResultVoUtil.success("delete success");
+
+        }catch (Exception e){
+            return ResultVoUtil.error("delete Docs failed");
+        }
+    }
+
+    @PostMapping("/searchDocsList")
+    public ResultVO searchDocsList(@RequestBody DocsUploadDTO docsUploadDTO){
+        try{
+
+            List<Docs> docsUploadDTOList = docsService.searchDocsList(docsUploadDTO);
+
+            return ResultVoUtil.success(docsUploadDTOList);
+
+        }catch (Exception e){
+            return ResultVoUtil.error("Search DocsList failed");
+        }
+    }
+
 }

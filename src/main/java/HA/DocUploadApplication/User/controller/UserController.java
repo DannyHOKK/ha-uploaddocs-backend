@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,16 +36,20 @@ public class UserController {
 
     @PostMapping( value = "/update" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseBody
-    public ResultVO editUser(HttpServletRequest request, @RequestPart(value = "image", required = false) MultipartFile file, @RequestParam("userinfo") String userInfo) throws IOException, SerialException, SQLException{
+    public ResultVO editUser(HttpServletRequest request, @RequestParam(value = "image", required = false) String base64Image, @RequestParam("userinfo") String userInfo) throws IOException, SerialException, SQLException{
         try{
 
             UserInfoDTO userInfoDTO = new UserInfoDTO();
             ObjectMapper objectMapper = new ObjectMapper();
             userInfoDTO = objectMapper.readValue(userInfo,UserInfoDTO.class);
 
-            if (file != null){
-                byte[] bytes = file.getBytes();
-                Blob blob = new SerialBlob(bytes);
+            if (base64Image != null && !base64Image.isEmpty()) {
+
+                String base64String = base64Image.replace("data:image/png;base64,", "");
+
+                // Decode the base64 string into byte array
+                byte[] imageBytes = Base64.getDecoder().decode(base64String);
+                Blob blob = new SerialBlob(imageBytes);
                 userInfoDTO.setIcon(blob);
             }
 
@@ -61,6 +66,9 @@ public class UserController {
         try{
             Blob blob = userDetailsInfoService.getIcon(id);
             byte[] image = null;
+            if (blob == null){
+                return ResultVoUtil.success("Icon is null");
+            }
             image = blob.getBytes(1, (int) blob.length());
             return ResultVoUtil.success(image);
         }catch (Exception e){
@@ -90,6 +98,20 @@ public class UserController {
                 return ResultVoUtil.error(msg);
             }
             return ResultVoUtil.success("delete Successfully");
+        }catch (Exception e){
+            return ResultVoUtil.error(e);
+        }
+    }
+
+    @GetMapping("/getUserList")
+    @ResponseBody
+    public ResultVO getUserList(){
+        try{
+            List<User> user = userService.findAllUser();
+            if (user == null){
+                return ResultVoUtil.error("fail to get all user");
+            }
+            return ResultVoUtil.success(user);
         }catch (Exception e){
             return ResultVoUtil.error(e);
         }

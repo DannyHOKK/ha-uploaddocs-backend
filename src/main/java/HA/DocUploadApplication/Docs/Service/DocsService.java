@@ -13,5 +13,9 @@ public interface DocsService {
 
     Docs findDocsById(Integer id) throws IOException;
 
-    List<Docs> findDocsList(DocsUploadDTO docsUploadDTO);
+    List<Docs> findDocsList();
+
+    String deleteDocsByRefNo(Integer refNo);
+
+    List<Docs> searchDocsList(DocsUploadDTO docsUploadDTO);
 }

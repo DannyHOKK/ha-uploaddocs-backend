@@ -1,5 +1,7 @@
 package HA.DocUploadApplication.core.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -36,6 +38,7 @@ public class Docs{
     private String remark;
 
     @Column(name = "CREATE_DATE")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date createDT;
 
     @Column(name = "CREATE_BY")
