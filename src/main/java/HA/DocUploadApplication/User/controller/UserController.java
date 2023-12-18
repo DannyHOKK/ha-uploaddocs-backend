@@ -43,7 +43,7 @@ public class UserController {
             ObjectMapper objectMapper = new ObjectMapper();
             userInfoDTO = objectMapper.readValue(userInfo,UserInfoDTO.class);
 
-            if (base64Image != null && !base64Image.isEmpty()) {
+            if (base64Image != null && base64Image.contains("data:image/png;base64,")) {
 
                 String base64String = base64Image.replace("data:image/png;base64,", "");
 

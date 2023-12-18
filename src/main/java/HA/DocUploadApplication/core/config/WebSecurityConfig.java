@@ -92,7 +92,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.authenticationProvider(daoAuthenticationProvider());
-        httpSecurity.addFilterBefore(new JwtAuthorizationFilter(), LogoutFilter.class);
+        httpSecurity.addFilterBefore(authorizationFilter(), LogoutFilter.class);
 
         return httpSecurity.build();
     }
@@ -106,6 +106,8 @@ public class WebSecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
+//        configuration.addAllowedHeader("Content-Disposition");
+//        configuration.addAllowedHeader("X-File-Name");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

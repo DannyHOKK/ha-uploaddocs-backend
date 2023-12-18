@@ -1,5 +1,6 @@
 package HA.DocUploadApplication.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -38,7 +39,7 @@ public class Docs{
     private String remark;
 
     @Column(name = "CREATE_DATE")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss",timezone = "GMT+8")
     private Date createDT;
 
     @Column(name = "CREATE_BY")
