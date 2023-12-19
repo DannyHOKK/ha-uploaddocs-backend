@@ -114,16 +114,16 @@ public class DocsServiceImpl implements DocsService {
         }
 
         if(StringUtils.isNotEmpty(category)){
-            sqlScript.append("and category = :category");
+            sqlScript.append(" and category = :category");
         }
         if(StringUtils.isNotEmpty(desc)){
-            sqlScript.append("and description = :desc");
+            sqlScript.append(" and description = :desc");
         }
         if(StringUtils.isNotEmpty(remark)){
-            sqlScript.append("and remark = :remark");
+            sqlScript.append(" and remark = :remark");
         }
         if(StringUtils.isNotEmpty(createBy)){
-            sqlScript.append("and create_by = :createBy");
+            sqlScript.append(" and create_by = :createBy");
         }
 
         Query query = entityManager.createNativeQuery(sqlScript.toString(), Docs.class);
