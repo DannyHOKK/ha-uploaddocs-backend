@@ -24,7 +24,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
