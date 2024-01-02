@@ -1,16 +1,7 @@
-package HA.DocUploadApplication.core.entity;
+package HA.DocUploadApplication.core.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public class BookingItemDTO {
 
-@Entity
-public class BookingItem {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer bookingItemId;
     private Integer item1;
     private Integer item2;
     private Integer item3;
@@ -24,33 +15,6 @@ public class BookingItem {
     private Integer item11;
     private Integer item12;
     private Integer item13;
-
-    public BookingItem() {
-    }
-
-    public BookingItem(Integer item1, Integer item2, Integer item3, Integer item4, Integer item5, Integer item6, Integer item7, Integer item8, Integer item9, Integer item10, Integer item11, Integer item12, Integer item13) {
-        this.item1 = item1;
-        this.item2 = item2;
-        this.item3 = item3;
-        this.item4 = item4;
-        this.item5 = item5;
-        this.item6 = item6;
-        this.item7 = item7;
-        this.item8 = item8;
-        this.item9 = item9;
-        this.item10 = item10;
-        this.item11 = item11;
-        this.item12 = item12;
-        this.item13 = item13;
-    }
-
-    public Integer getBookingItemId() {
-        return bookingItemId;
-    }
-
-    public void setBookingItemId(Integer bookingItemId) {
-        this.bookingItemId = bookingItemId;
-    }
 
     public Integer getItem1() {
         return item1;

@@ -6,6 +6,5 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Component
-public interface BookingCartRepository extends JpaRepository<BookingCart, Long> {
+public interface BookingCartRepository extends JpaRepository<BookingCart, Integer> {
 }
