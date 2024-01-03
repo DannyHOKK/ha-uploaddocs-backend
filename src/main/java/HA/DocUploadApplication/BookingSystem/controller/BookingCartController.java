@@ -8,6 +8,8 @@ import HA.DocUploadApplication.core.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/booking/cart")
 @CrossOrigin
@@ -27,6 +29,20 @@ public class BookingCartController {
             return ResultVoUtil.success("Create Successfully", bookingCart1);
         }catch (Exception e){
             return ResultVoUtil.error("Failed to create shopping cart");
+        }
+    }
+
+    @GetMapping("/get")
+    private ResultVO getBookingCart(@RequestParam Long userId){
+        try{
+
+            List<BookingCart> bookingCart = bookingCartService.findBookingCartDetails(userId);
+            if (bookingCart == null){
+                return ResultVoUtil.error("Get BookingCart Failed");
+            }
+            return ResultVoUtil.success("Get BookingCart Successfully", bookingCart);
+        }catch (Exception e){
+            return ResultVoUtil.error("Failed to get shopping cart");
         }
     }
 }

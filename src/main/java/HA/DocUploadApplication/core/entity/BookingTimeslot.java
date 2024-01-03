@@ -24,8 +24,11 @@ public class BookingTimeslot {
     private Boolean bookingTimeslot13;
     private Boolean bookingTimeslot14;
 
+    public BookingTimeslot() {
+    }
 
-    public BookingTimeslot(Boolean bookingTimeslot1, Boolean bookingTimeslot2, Boolean bookingTimeslot3, Boolean bookingTimeslot4, Boolean bookingTimeslot5, Boolean bookingTimeslot6, Boolean bookingTimeslot7, Boolean bookingTimeslot8, Boolean bookingTimeslot9, Boolean bookingTimeslot10, Boolean bookingTimeslot11, Boolean bookingTimeslot12, Boolean bookingTimeslot13, Boolean bookingTimeslot14) {
+    public BookingTimeslot(Integer bookingTimeslotId, Boolean bookingTimeslot1, Boolean bookingTimeslot2, Boolean bookingTimeslot3, Boolean bookingTimeslot4, Boolean bookingTimeslot5, Boolean bookingTimeslot6, Boolean bookingTimeslot7, Boolean bookingTimeslot8, Boolean bookingTimeslot9, Boolean bookingTimeslot10, Boolean bookingTimeslot11, Boolean bookingTimeslot12, Boolean bookingTimeslot13, Boolean bookingTimeslot14) {
+        this.bookingTimeslotId = bookingTimeslotId;
         this.bookingTimeslot1 = bookingTimeslot1;
         this.bookingTimeslot2 = bookingTimeslot2;
         this.bookingTimeslot3 = bookingTimeslot3;

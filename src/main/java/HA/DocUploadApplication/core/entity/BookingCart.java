@@ -51,7 +51,9 @@ public class BookingCart {
         this.howToKnow = bookingCartDTO.getHowToKnow();
         this.foodOption = bookingCartDTO.getFoodOption();
     }
-    public BookingCart(User user, VenueInfo venueInfo, Date bookingDate, BookingTimeslot timeslot, Date createDt, BookingItem bookingItem, String eventName, String nature, String extraCharge, String venueUsage, String other, String howToKnow, Boolean foodOption) {
+
+    public BookingCart(Integer cartId, User user, VenueInfo venueInfo, Date bookingDate, BookingTimeslot timeslot, Date createDt, BookingItem bookingItem, String eventName, String nature, String extraCharge, String venueUsage, String other, String howToKnow, Boolean foodOption) {
+        this.cartId = cartId;
         this.user = user;
         this.venueInfo = venueInfo;
         this.bookingDate = bookingDate;
