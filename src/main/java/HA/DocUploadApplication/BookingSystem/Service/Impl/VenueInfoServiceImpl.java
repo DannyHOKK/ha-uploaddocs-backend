@@ -5,6 +5,8 @@ import HA.DocUploadApplication.BookingSystem.repository.VenueInfoRepository;
 import HA.DocUploadApplication.core.entity.VenueInfo;
 import HA.DocUploadApplication.core.dto.VenueInfoDTO;
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,7 @@ public class VenueInfoServiceImpl implements VenueInfoService {
     @Autowired
     private VenueInfoRepository venueInfoRepository;
 
+    private Logger logger = LoggerFactory.getLogger(VenueInfoServiceImpl.class);
 
     @Override
     public VenueInfo getVenueById(Integer venueId) {
@@ -41,6 +44,7 @@ public class VenueInfoServiceImpl implements VenueInfoService {
             venueInfoRepository.save(venueInfo);
             return "";
         }catch (Exception e){
+            logger.error("testing: " + e.getMessage());
             return "Failed to upload";
         }
 
