@@ -59,4 +59,15 @@ public class BookingCartServiceImpl implements BookingCartService {
             return null;
         }
     }
+
+    @Override
+    public String deleteByCartId(Integer cartId) {
+
+        try {
+            bookingCartRepository.deleteById(cartId);
+            return "";
+        }catch (Exception e){
+            return "Delete error";
+        }
+    }
 }

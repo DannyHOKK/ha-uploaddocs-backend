@@ -5,6 +5,7 @@ import HA.DocUploadApplication.core.entity.BookingCart;
 import HA.DocUploadApplication.core.utils.ResultVoUtil;
 import HA.DocUploadApplication.core.dto.BookingCartDTO;
 import HA.DocUploadApplication.core.vo.ResultVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,4 +46,18 @@ public class BookingCartController {
             return ResultVoUtil.error("Failed to get shopping cart");
         }
     }
+
+    @PostMapping("/deleteCart")
+    private ResultVO deleteBookingCart(@RequestParam Integer cartId){
+        try{
+            String errMsg = bookingCartService.deleteByCartId(cartId);
+            if (StringUtils.isNotEmpty(errMsg)){
+                return ResultVoUtil.error("Failed to delete shopping cart");
+            }
+            return ResultVoUtil.success("delete BookingCart Successfully");
+        }catch (Exception e){
+            return ResultVoUtil.error("Failed to delete shopping cart");
+        }
+    }
+
 }

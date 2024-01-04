@@ -11,4 +11,6 @@ public interface BookingCartService {
     BookingCart save(BookingCartDTO bookingCart);
 
     List<BookingCart> findBookingCartDetails(Long userId);
+
+    String deleteByCartId(Integer cartId);
 }

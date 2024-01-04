@@ -13,10 +13,10 @@ public class BookingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartId;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "venue_id")
     private VenueInfo venueInfo;
     @JsonFormat(pattern = "dd/MM/yyyy",timezone = "GMT+8")
