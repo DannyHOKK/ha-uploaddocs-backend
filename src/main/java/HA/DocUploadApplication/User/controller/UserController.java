@@ -24,7 +24,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
@@ -43,7 +43,7 @@ public class UserController {
             ObjectMapper objectMapper = new ObjectMapper();
             userInfoDTO = objectMapper.readValue(userInfo,UserInfoDTO.class);
 
-            if (base64Image != null && !base64Image.isEmpty()) {
+            if (base64Image != null && base64Image.contains("data:image/png;base64,")) {
 
                 String base64String = base64Image.replace("data:image/png;base64,", "");
 

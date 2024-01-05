@@ -18,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -75,8 +78,9 @@ public class DocsController {
             Docs docs = docsService.findDocsById(id);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentDispositionFormData("attachment",docs.getFilename());
+            headers.setContentDispositionFormData("attachment", URLEncoder.encode(docs.getFilename(), StandardCharsets.UTF_8));
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setAccessControlExposeHeaders(Collections.singletonList("Content-Disposition"));
             headers.set("Content-Encoding", "UTF-8");
             return ResponseEntity.ok()
                     .headers(headers)

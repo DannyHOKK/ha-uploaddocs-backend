@@ -19,8 +19,7 @@ import javax.persistence.Query;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DocsServiceImpl implements DocsService {
@@ -31,22 +30,40 @@ public class DocsServiceImpl implements DocsService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private static final Map<String, String> CONTENT_TYPE_TO_EXTENSION = new HashMap<>();
+
+    static {
+        CONTENT_TYPE_TO_EXTENSION.put("application/pdf", "pdf");
+        CONTENT_TYPE_TO_EXTENSION.put("image/jpeg", "jpeg");
+        CONTENT_TYPE_TO_EXTENSION.put("application/msword", "doc");
+        CONTENT_TYPE_TO_EXTENSION.put("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docx");
+        CONTENT_TYPE_TO_EXTENSION.put("application/vnd.ms-powerpoint", "ppt");
+        CONTENT_TYPE_TO_EXTENSION.put("application/vnd.openxmlformats-officedocument.presentationml.presentation", "pptx");
+        CONTENT_TYPE_TO_EXTENSION.put("application/zip", "zip");
+        CONTENT_TYPE_TO_EXTENSION.put("application/vnd.ms-excel", "xls");
+        CONTENT_TYPE_TO_EXTENSION.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xlsx");
+        // Add more mappings as needed
+    }
+
     @Override
     public String uploadDocs(MultipartFile multipartFile, DocsUploadDTO docsUploadDTO) throws Exception {
 
         try {//dealing with the larger size of file.
             //multipartFile.getBytes() is easier to use, but for the small size of file
             UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            byte[] fileData = StreamUtils.copyToByteArray(multipartFile.getInputStream());
-            Blob blob = new SerialBlob(fileData);
-            Docs docs = new Docs(docsUploadDTO.getCategory(), multipartFile.getOriginalFilename(), fileData, docsUploadDTO.getDesc(), docsUploadDTO.getRemark() ,new Date(), userDetail.getUsername());
+            byte[] fileData = multipartFile.getBytes();
+            String fileType = null;
+
+            Docs docs = new Docs(getFileType(multipartFile.getContentType()), multipartFile.getOriginalFilename(), fileData, docsUploadDTO.getDesc(), docsUploadDTO.getRemark() ,new Date(), userDetail.getUsername());
             docsRepository.save(docs);
             return "success";
         }catch (Exception e){
             return "upload failed";
         }
+    }
 
-
+    public static String getFileType(String contentType) {
+        return CONTENT_TYPE_TO_EXTENSION.getOrDefault(contentType, "unknown");
     }
 
     @Override
@@ -97,16 +114,16 @@ public class DocsServiceImpl implements DocsService {
         }
 
         if(StringUtils.isNotEmpty(category)){
-            sqlScript.append("and category = :category");
+            sqlScript.append(" and category = :category");
         }
         if(StringUtils.isNotEmpty(desc)){
-            sqlScript.append("and description = :desc");
+            sqlScript.append(" and description = :desc");
         }
         if(StringUtils.isNotEmpty(remark)){
-            sqlScript.append("and remark = :remark");
+            sqlScript.append(" and remark = :remark");
         }
         if(StringUtils.isNotEmpty(createBy)){
-            sqlScript.append("and create_by = :createBy");
+            sqlScript.append(" and create_by = :createBy");
         }
 
         Query query = entityManager.createNativeQuery(sqlScript.toString(), Docs.class);
