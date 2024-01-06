@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://dannyhkk.site")
 @RequestMapping("/api")
 public class DataController {
 
