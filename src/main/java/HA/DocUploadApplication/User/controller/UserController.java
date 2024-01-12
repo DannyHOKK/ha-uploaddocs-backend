@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "https://dannyhkk.site")
+@CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
 
