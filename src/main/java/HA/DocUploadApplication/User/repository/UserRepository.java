@@ -16,13 +16,13 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Optional<User> findAllByUsername(String username);
 
-    @Query(value = "select name from user u where u.name = :checkName",nativeQuery = true)
+    @Query(value = "select name from users u where u.name = :checkName",nativeQuery = true)
     String checkExitName(@Param("checkName") String name);
 
-    @Query(value = "select username from user u where u.username = :checkUserName",nativeQuery = true)
+    @Query(value = "select username from users u where u.username = :checkUserName",nativeQuery = true)
     String checkExitUserName(@Param("checkUserName") String username);
 
-    @Query(value = "select email from user u where u.email = :checkEmail",nativeQuery = true)
+    @Query(value = "select email from users u where u.email = :checkEmail",nativeQuery = true)
     String checkEmail(@Param("checkEmail") String email);
 
 }

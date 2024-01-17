@@ -1,14 +1,19 @@
 package HA.DocUploadApplication.BookingSystem.controller;
 
 import HA.DocUploadApplication.BookingSystem.Service.BookingCartService;
+import HA.DocUploadApplication.core.dao.UnavailableTimeslot;
 import HA.DocUploadApplication.core.entity.BookingCart;
 import HA.DocUploadApplication.core.utils.ResultVoUtil;
 import HA.DocUploadApplication.core.dto.BookingCartDTO;
 import HA.DocUploadApplication.core.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,7 +51,22 @@ public class BookingCartController {
             return ResultVoUtil.error("Failed to get shopping cart");
         }
     }
-
+    @GetMapping("/getUnavailable")
+    private ResultVO getUnavailable(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        try{
+            LocalTime startTime = LocalTime.of(9,0,0);
+            LocalTime endTime = LocalTime.of(22,0,0);
+            List<BookingCart> bookingCartList = bookingCartService.getBooking(date, startTime, endTime);
+            List<UnavailableTimeslot> unavailableTimeslotList = new ArrayList<>();
+            for (BookingCart bookingTimeslot : bookingCartList){
+                UnavailableTimeslot newTimeslot = new UnavailableTimeslot(bookingTimeslot);
+                unavailableTimeslotList.add(newTimeslot);
+            }
+            return ResultVoUtil.success(unavailableTimeslotList);
+        }catch (Exception e){
+            return ResultVoUtil.error("Failed to get unavailable time");
+        }
+    }
     @PostMapping("/deleteCart")
     private ResultVO deleteBookingCart(@RequestParam Integer cartId){
         try{

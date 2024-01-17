@@ -6,7 +6,6 @@ import HA.DocUploadApplication.BookingSystem.repository.VenueInfoRepository;
 import HA.DocUploadApplication.User.repository.UserRepository;
 import HA.DocUploadApplication.core.dto.BookingCartDTO;
 import HA.DocUploadApplication.core.entity.BookingCart;
-import HA.DocUploadApplication.core.entity.BookingCartMappingEntity;
 import HA.DocUploadApplication.core.entity.User;
 import HA.DocUploadApplication.core.entity.VenueInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class BookingCartServiceImpl implements BookingCartService {
@@ -28,10 +28,25 @@ public class BookingCartServiceImpl implements BookingCartService {
     @Autowired
     private UserRepository userRepository;
 
+
+//    public boolean isAvailable(LocalDate bookingDate, LocalTime startTime, LocalTime endTime) {
+//        List<BookingCart> matchingReservations = bookingCartRepository.findByBookingDateAndStartTimeLessThanAndEndTimeGreaterThan(bookingDate, endTime, startTime);
+//        return matchingReservations.isEmpty();
+//    }
+    private boolean isTimeSlotBooked(LocalDate bookingDate, LocalTime startTime, LocalTime endTime) {
+        List<BookingCart> conflictingSlots = bookingCartRepository.findConflictingSlots(bookingDate, startTime, endTime);
+        return !conflictingSlots.isEmpty();
+    }
+
+
     @Override
     public BookingCart save(BookingCartDTO bookingCartDto) {
 
         try {
+            if (isTimeSlotBooked(bookingCartDto.getBookingDate(),bookingCartDto.getStartTime(),bookingCartDto.getEndTime())){
+                return null;
+            }
+
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             VenueInfo venueInfo = venueInfoRepository.findById(bookingCartDto.getVenueID()).orElseThrow();
             User user = userRepository.findAllByUsername(userDetails.getUsername()).orElseThrow();
@@ -69,5 +84,10 @@ public class BookingCartServiceImpl implements BookingCartService {
         }catch (Exception e){
             return "Delete error";
         }
+    }
+
+    @Override
+    public List<BookingCart> getBooking(LocalDate bookingDate, LocalTime startTime, LocalTime endTime) {
+        return bookingCartRepository.findByBookingDateAndStartTimeLessThanAndEndTimeGreaterThan(bookingDate,startTime,endTime);
     }
 }

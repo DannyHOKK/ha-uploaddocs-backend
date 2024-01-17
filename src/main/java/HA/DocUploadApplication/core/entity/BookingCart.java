@@ -1,9 +1,12 @@
 package HA.DocUploadApplication.core.entity;
 
 import HA.DocUploadApplication.core.dto.BookingCartDTO;
+import HA.DocUploadApplication.core.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -14,16 +17,17 @@ public class BookingCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartId;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @OneToOne
     @JoinColumn(name = "venue_id")
     private VenueInfo venueInfo;
-    @JsonFormat(pattern = "dd/MM/yyyy",timezone = "GMT+8")
-    private Date bookingDate;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "timeslot_id")
-    private BookingTimeslot timeslot;
+    @Column(name = "booking_date")
+    private LocalDate bookingDate;
+    @Column(name = "start_time")
+    private LocalTime startTime;
+    @Column(name = "end_time")
+    private LocalTime endTime;
     @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss",timezone = "GMT+8")
     private Date createDt;
     @OneToOne(cascade = CascadeType.ALL)
@@ -41,7 +45,8 @@ public class BookingCart {
     }
     public BookingCart(BookingCartDTO bookingCartDTO){
         this.bookingDate = bookingCartDTO.getBookingDate();
-        this.timeslot = bookingCartDTO.getTimeslot();
+        this.startTime = bookingCartDTO.getStartTime();
+        this.endTime = bookingCartDTO.getEndTime();
         this.bookingItem = bookingCartDTO.getBookingItem();
         this.eventName = bookingCartDTO.getEventName();
         this.nature = bookingCartDTO.getNature();
@@ -52,12 +57,13 @@ public class BookingCart {
         this.foodOption = bookingCartDTO.getFoodOption();
     }
 
-    public BookingCart(Integer cartId, User user, VenueInfo venueInfo, Date bookingDate, BookingTimeslot timeslot, Date createDt, BookingItem bookingItem, String eventName, String nature, String extraCharge, String venueUsage, String other, String howToKnow, Boolean foodOption) {
+    public BookingCart(Integer cartId, User user, VenueInfo venueInfo, LocalDate bookingDate, LocalTime startTime, LocalTime endTime, Date createDt, BookingItem bookingItem, String eventName, String nature, String extraCharge, String venueUsage, String other, String howToKnow, Boolean foodOption) {
         this.cartId = cartId;
         this.user = user;
         this.venueInfo = venueInfo;
         this.bookingDate = bookingDate;
-        this.timeslot = timeslot;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.createDt = createDt;
         this.bookingItem = bookingItem;
         this.eventName = eventName;
@@ -101,20 +107,28 @@ public class BookingCart {
         this.venueInfo = venueInfo;
     }
 
-    public Date getBookingDate() {
+    public LocalDate getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
     }
 
-    public BookingTimeslot getTimeslot() {
-        return timeslot;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setTimeslot(BookingTimeslot timeslot) {
-        this.timeslot = timeslot;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public Date getCreateDt() {

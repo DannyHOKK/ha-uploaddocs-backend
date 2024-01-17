@@ -1,16 +1,17 @@
 package HA.DocUploadApplication.core.dto;
 
 import HA.DocUploadApplication.core.entity.BookingItem;
-import HA.DocUploadApplication.core.entity.BookingTimeslot;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 public class BookingCartDTO {
     private Integer venueID;
-    @JsonFormat(pattern = "dd/MM/yyyy",timezone = "GMT+8")
-    private Date bookingDate;
-    private BookingTimeslot timeslot;
+    private LocalDate bookingDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private BookingItem bookingItem;
     private String eventName;
     private String nature;
@@ -20,12 +21,20 @@ public class BookingCartDTO {
     private String howToKnow;
     private Boolean foodOption;
 
-    public BookingTimeslot getTimeslot() {
-        return timeslot;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setTimeslot(BookingTimeslot timeslot) {
-        this.timeslot = timeslot;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public Boolean getFoodOption() {
@@ -44,14 +53,13 @@ public class BookingCartDTO {
         this.venueID = venueID;
     }
 
-    public Date getBookingDate() {
+    public LocalDate getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
     }
-
 
     public BookingItem getBookingItem() {
         return bookingItem;
