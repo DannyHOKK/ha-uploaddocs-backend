@@ -1,5 +1,7 @@
 package HA.DocUploadApplication.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,7 @@ public class BookingTimeslot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer bookingTimeslotId;
     private Boolean bookingTimeslot1;
     private Boolean bookingTimeslot2;
